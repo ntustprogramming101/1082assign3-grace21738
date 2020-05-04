@@ -108,7 +108,7 @@ void setup() {
   cabbageY= 160+floor(random(0,4))*BLOCK;
   
   //life
-  heartNum = 4;
+  heartNum = 2;
 
 }
 
@@ -153,9 +153,6 @@ void draw() {
 // In-Game
 		case GAME_RUN: 
 //translate
-     if( camera ){
-      translate( 0,pageCamera );
-    }
 
 // Background
 		image(bg, 0, 0);
@@ -170,6 +167,10 @@ void draw() {
 		fill(124, 204, 25);
 		noStroke();
 		rect(0, 160 - GRASS_HEIGHT, width, GRASS_HEIGHT);
+
+    if( camera ){
+      translate( 0,pageCamera );
+    }
 
 // Soil - REPLACE THIS PART WITH YOUR LOOP CODE!
 		  //image(soil8x24, 0, 160);
@@ -285,7 +286,7 @@ void draw() {
       
       if( hogX>=cabbageX && hogX<(cabbageX+BLOCK) ){
         if( hogY==cabbageY ){
-          heartNum --;
+          heartNum ++;
           newLife = true;
         }
       }
@@ -296,7 +297,7 @@ void draw() {
     if( hogY==soldierY ){
       
       if( (hogX+BLOCK) > (soldierX+BLOCK) && hogX < (soldierX+BLOCK)  ){
-        heartNum ++;
+        heartNum --;
         hogX = ROG_START_X;
         hogY = ROG_START_Y;
         
@@ -306,7 +307,7 @@ void draw() {
         camera = false;
       }
       if( (hogX+BLOCK) > soldierX && hogX < soldierX  ){
-        heartNum ++;
+        heartNum --;
         hogX = ROG_START_X;
         hogY = ROG_START_Y;
         
@@ -320,7 +321,7 @@ void draw() {
     
       
       //no heart game over
-      if( heartNum>5 ){
+      if( heartNum<1 ){
         gameState = GAME_OVER;
       }
     
@@ -370,23 +371,10 @@ void draw() {
 
 // Health UI
    //amount of heart
-    switch( heartNum ){
-      case 1:
-        image( life,290,heartY );
-      
-      case 2:
-        image( life,220,heartY );
-        
-      case 3:
-        image( life,150,heartY );
-        
-      case 4:
-         image( life,80,heartY );
-        
-      case 5:
-        image( life,10,heartY );
-        
-        break;
+    
+    for( int i=0 ; i<heartNum ; i++ ){
+     
+      image( life,10+i*70,heartY );
       
     }
      
@@ -422,7 +410,7 @@ void draw() {
           heartY = 10;
           pageCamera = 0;
           camera = false;
-          heartNum = 4;
+          heartNum = 2;
           pageY=0;
           
 			}
@@ -464,57 +452,57 @@ void keyPressed(){
       break;
 
       case 'a':
-      if( heartNum < 6) heartNum ++;
+      if( heartNum > 0) heartNum --;
   
       break;
 
       case 'd':
-      if( heartNum > 0) heartNum --;
-      if( heartNum == 0 ){
-        heartNum = 1;
+      if( heartNum > 0) heartNum ++;
+      if( heartNum >= 5 ){
+        heartNum = 5;
       }
       break;
        
     }
     
-    
- if( ! leftPressed && ! rightPressed && ! downPressed){ 
-    switch( keyCode ){
-      case LEFT:
-        hogMoveX = hogX;
-        if( hogX>0 ){
-          leftPressed = true;
-          hogX -= BLOCK;
-        }
-        break;
-        
-      case RIGHT:
-        hogMoveX = hogX;
-        if( hogX<560 ){
-          rightPressed = true;
-          hogX += BLOCK;
-        }
-        break;
-        
-        
-        
-      case DOWN:
-        hogMoveY = hogY;
-        if( pageCamera>-1921 ){
-          downPressed = true;
-          camera = true;
-          //hog max
-          if( hogY<2000 ){
-            hogY += BLOCK;
+ if( gameState==GAME_RUN ){
+   if( ! leftPressed && ! rightPressed && ! downPressed){ 
+      switch( keyCode ){
+        case LEFT:
+          hogMoveX = hogX;
+          if( hogX>0 ){
+            leftPressed = true;
+            hogX -= BLOCK;
           }
-          pageY -= BLOCK; 
-        }
-        
-        
-        break;   
-     }
-  }
-   
+          break;
+          
+        case RIGHT:
+          hogMoveX = hogX;
+          if( hogX<560 ){
+            rightPressed = true;
+            hogX += BLOCK;
+          }
+          break;
+          
+          
+          
+        case DOWN:
+          hogMoveY = hogY;
+          if( pageCamera>-1921 ){
+            downPressed = true;
+            camera = true;
+            //hog max
+            if( hogY<2000 ){
+              hogY += BLOCK;
+            }
+            pageY -= BLOCK; 
+          }
+          
+          
+          break;   
+       }
+    }
+ }
 }
 
 void keyReleased(){
