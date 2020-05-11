@@ -318,6 +318,15 @@ void draw() {
       }
     }
     
+    // Health UI
+   //amount of heart
+    
+    for( int i=0 ; i<heartNum ; i++ ){
+     
+      image( life,10+i*70,heartY );
+      
+    }
+    
     
       
       //no heart game over
@@ -368,15 +377,6 @@ void draw() {
         image( groundhogIdle,hogX,hogY );
       }
 
-
-// Health UI
-   //amount of heart
-    
-    for( int i=0 ; i<heartNum ; i++ ){
-     
-      image( life,10+i*70,heartY );
-      
-    }
      
 		break;
 
